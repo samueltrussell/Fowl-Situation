@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
 	public Rigidbody playerRigidbody;
 	public float speed;
+//	public Animator anim;
 
 	private Vector3 targetPosition;
 	private Vector3 movement;
@@ -28,6 +29,16 @@ public class PlayerController : MonoBehaviour {
 		movement = (targetPosition - transform.position);
 		movement = movement.normalized * speed * Time.fixedDeltaTime;
 		playerRigidbody.MovePosition (transform.position + movement);
+
+		float error = Vector3.Distance (targetPosition, transform.position);
+
+//		if (error > 1) {
+//			anim.SetBool ("Walking", true);
+//		
+//		} else {
+//			anim.SetBool ("Walking", false);
+//		
+//		}
 
 	}
 
