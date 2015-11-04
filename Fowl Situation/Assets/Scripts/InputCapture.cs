@@ -9,6 +9,7 @@ public class InputCapture : MonoBehaviour {
 	public PlayerController playerController;
 
 	private Vector3 initialClickPosition;
+	private Vector3 floorHit;
 	private float initialClickTime;
 
 	void Awake()
@@ -22,26 +23,27 @@ public class InputCapture : MonoBehaviour {
 			//getPosition ();
 			//Debug.Log("Got Click Event");
 
-			initialClickPosition = Input.mousePosition;
+			initialClickPosition = getRayCastMousePosition();
 			initialClickTime = Time.realtimeSinceStartup;
 		}
 		if(Input.GetMouseButtonUp(0)){ //on left click release
-			if(Vector3.Distance (Input.mousePosition, initialClickPosition) > 10){
+			if(Vector3.Distance (getRayCastMousePosition(), initialClickPosition) > 10){
 				//This is a swipe
 				//compute the direction of the swipe
-				Vector3 swipe = Input.mousePosition - initialClickPosition;
+				Vector3 swipe = getRayCastMousePosition() - initialClickPosition;
 				swipe.Normalize();
 				playerController.StartAttack (swipe);
 				Debug.Log("SWIPE!");
 
 			}else{
-				getPosition ();
+				floorHit = getRayCastMousePosition();
+				playerController.UpdateTargetPosition(initialClickPosition);
 				Debug.Log("Got Click Event");
 			}
 		}
 	}
 
-	void getPosition()
+	Vector3 getRayCastMousePosition()
 	{
 		Ray camRay;
 		RaycastHit floorHit;
@@ -54,7 +56,10 @@ public class InputCapture : MonoBehaviour {
 
 		if (Physics.Raycast(camRay,out floorHit,camRayLength, floorMask))
 		{
-			playerController.UpdateTargetPosition(floorHit.point);
+			return floorHit.point;
 		}
+
+		Debug.Log ("RayCast miss... this is bad");
+		return Vector3.zero;
 	}
 }
