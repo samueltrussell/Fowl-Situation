@@ -71,6 +71,11 @@ public class PlayerController : MonoBehaviour {
 
 	public void attack()
 	{
+		if (Vector3.Distance (transform.position, meleeWeaponBody.position) > 2) {
+			attacking = false;
+			meleeWeaponBody.position = new Vector3(0,1,0);
+			meleeWeaponBody.velocity = new Vector3(0,0,0);
+		}
 		//swipe *= meleeStrength;
 	}
 
