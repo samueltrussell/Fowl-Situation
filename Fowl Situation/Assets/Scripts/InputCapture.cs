@@ -9,8 +9,8 @@ public class InputCapture : MonoBehaviour {
 	public PlayerController playerController;
 
 	private Vector3 initialClickPosition;
-	private Vector3 floorHit;
-	private float initialClickTime;
+	//private Vector3 floorHit;
+	//private float initialClickTime;
 
 	void Awake()
 	{
@@ -24,7 +24,7 @@ public class InputCapture : MonoBehaviour {
 			//Debug.Log("Got Click Event");
 
 			initialClickPosition = getRayCastMousePosition();
-			initialClickTime = Time.realtimeSinceStartup;
+			//initialClickTime = Time.realtimeSinceStartup;
 		}
 		if(Input.GetMouseButtonUp(0)){ //on left click release
 			if(Vector3.Distance (getRayCastMousePosition(), initialClickPosition) > 10){
@@ -36,7 +36,7 @@ public class InputCapture : MonoBehaviour {
 				Debug.Log("SWIPE!");
 
 			}else{
-				floorHit = getRayCastMousePosition();
+				//floorHit = getRayCastMousePosition();
 				playerController.UpdateTargetPosition(initialClickPosition);
 				Debug.Log("Got Click Event");
 			}

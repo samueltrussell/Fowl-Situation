@@ -5,26 +5,30 @@ public class PlayerController : MonoBehaviour {
 
 	//public Rigidbody playerRigidbody;
 	public GameObject player, target;
-	public Rigidbody meleeWeaponBody;
+	public GameObject meleeWeapon;
 	public float speed= 10f;
 	public float meleeStrength = 5f;
+	public float meleeDuration = .5f;
+	public float meleeRange = .5f;
 	public Animator anim;
 
 	private Vector3 targetPosition;
 	private Vector3 movement;
 	private bool attacking = false;
 	private Vector3 attackVector;
-
+	private Rigidbody meleeWeaponBody;
+	private double attackStartTime;
 
 	void Awake()
 	{
 		targetPosition = transform.position;
+		meleeWeaponBody = meleeWeapon.GetComponentInChildren<Rigidbody> ();
 	}
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		float h = Input.GetAxisRaw ("Horizontal");
-		float v = Input.GetAxisRaw ("Vertical");
+//		float h = Input.GetAxisRaw ("Horizontal");
+//		float v = Input.GetAxisRaw ("Vertical");
 
 		if (attacking)
 			attack ();
@@ -64,17 +68,18 @@ public class PlayerController : MonoBehaviour {
 	public void StartAttack(Vector3 swipe)
 	{
 		attacking = true;
-		attackVector = swipe * meleeStrength;
+		attackStartTime = Time.realtimeSinceStartup;
+		attackVector = swipe * meleeRange;
 
-		meleeWeaponBody.velocity = attackVector;
+		meleeWeaponBody.position += attackVector;
 	}
 
 	public void attack()
 	{
-		if (Vector3.Distance (transform.position, meleeWeaponBody.position) > 2) {
-			attacking = false;
-			meleeWeaponBody.position = new Vector3(0,1,0);
+		if (Time.realtimeSinceStartup - attackStartTime > meleeDuration) {
 			meleeWeaponBody.velocity = new Vector3(0,0,0);
+			meleeWeaponBody.position = transform.position + new Vector3 (0,1,0);
+			attacking = false;
 		}
 		//swipe *= meleeStrength;
 	}
