@@ -22,11 +22,10 @@ public class SpawnPoint : MonoBehaviour {
 		// Update is called once per frame
 	void Update () 
 	{
-		
+
 		distancefromPlayer = Vector3.Distance (transform.position, player.transform.position);
 		
-		
-		
+
 	}
 
 	//Spawn Function
