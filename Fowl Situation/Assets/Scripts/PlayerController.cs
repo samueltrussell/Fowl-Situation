@@ -3,28 +3,27 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
-	//public Rigidbody playerRigidbody;
+
 	public GameObject player, target;
-	public Rigidbody meleeWeaponBody;
-	public float speed= 10f;
-	public float meleeStrength = 5f;
+	public float moveSpeed= 10f;
 	public Animator anim;
 
 	private Vector3 targetPosition;
 	private Vector3 movement;
+	private Vector3 headingToTarget;
+
 	private bool attacking = false;
 	private Vector3 attackVector;
-
+	private double attackStartTime;
 
 	void Awake()
 	{
 		targetPosition = transform.position;
+		//meleeWeaponBody = meleeWeapon.GetComponentInChildren<Rigidbody> ();
 	}
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		float h = Input.GetAxisRaw ("Horizontal");
-		float v = Input.GetAxisRaw ("Vertical");
 
 		if (attacking)
 			attack ();
@@ -37,13 +36,23 @@ public class PlayerController : MonoBehaviour {
 
 		if (error > .2) {
 			movement = (targetPosition - transform.position);
-			movement = movement.normalized * speed * Time.fixedDeltaTime;
+			//headingToTarget = movement.normalized;
+			movement = movement.normalized * moveSpeed * Time.fixedDeltaTime;
 			transform.position = (transform.position + movement);
 		} else {
 			movement = (targetPosition - transform.position);
-			movement = movement.normalized * speed * error * Time.fixedDeltaTime;
+			//headingToTarget = movement.normalized;
+			movement = movement.normalized * moveSpeed * error * Time.fixedDeltaTime;
 			transform.position = (transform.position + movement);
 		}
+
+		//update heading of character
+		headingToTarget.y = 0f;
+		Quaternion newHeading = Quaternion.LookRotation (headingToTarget);
+		Rigidbody playerBody = player.GetComponent<Rigidbody>();
+		playerBody.MoveRotation (newHeading);
+
+
 
 		if (error > 1) {
 			anim.SetBool ("Walking", true);
@@ -59,24 +68,24 @@ public class PlayerController : MonoBehaviour {
 	{
 		targetPosition = i_targetPosition;
 		target.transform.position = i_targetPosition + new Vector3(0,.2f,0);
+
+		headingToTarget = target.transform.position - transform.position;
 	}
 
 	public void StartAttack(Vector3 swipe)
 	{
-		attacking = true;
-		attackVector = swipe * meleeStrength;
+		headingToTarget = swipe;
+		anim.SetTrigger ("Punch");
 
-		meleeWeaponBody.velocity = attackVector;
+	}
+
+	public void StartAreaAttack(){
+		anim.SetTrigger ("Spin");
 	}
 
 	public void attack()
 	{
-		if (Vector3.Distance (transform.position, meleeWeaponBody.position) > 2) {
-			attacking = false;
-			meleeWeaponBody.position = new Vector3(0,1,0);
-			meleeWeaponBody.velocity = new Vector3(0,0,0);
-		}
-		//swipe *= meleeStrength;
+
 	}
 
 }

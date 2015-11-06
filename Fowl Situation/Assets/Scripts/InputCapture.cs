@@ -7,9 +7,10 @@ public class InputCapture : MonoBehaviour {
 	float camRayLength = 100f;
 
 	public PlayerController playerController;
+	public WeaponHandler weaponHandler;
+	public float AOEHoldDelay = .5f;
 
 	private Vector3 initialClickPosition;
-	private Vector3 floorHit;
 	private float initialClickTime;
 
 	void Awake()
@@ -20,25 +21,30 @@ public class InputCapture : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetMouseButtonDown (0)) { //on left click
-			//getPosition ();
-			//Debug.Log("Got Click Event");
 
 			initialClickPosition = getRayCastMousePosition();
-			initialClickTime = Time.realtimeSinceStartup;
+			initialClickTime = Time.timeSinceLevelLoad;
 		}
+
 		if(Input.GetMouseButtonUp(0)){ //on left click release
-			if(Vector3.Distance (getRayCastMousePosition(), initialClickPosition) > 10){
+			if(Vector3.Distance (getRayCastMousePosition(), initialClickPosition) > 2){
 				//This is a swipe
 				//compute the direction of the swipe
 				Vector3 swipe = getRayCastMousePosition() - initialClickPosition;
 				swipe.Normalize();
-				playerController.StartAttack (swipe);
+				playerController.StartAttack(swipe);
+				weaponHandler.StartAttack (swipe);
 				Debug.Log("SWIPE!");
 
-			}else{
-				floorHit = getRayCastMousePosition();
+			}else if(Time.timeSinceLevelLoad - initialClickTime < AOEHoldDelay ){
+				//This is a tap, use it to navigate
 				playerController.UpdateTargetPosition(initialClickPosition);
 				Debug.Log("Got Click Event");
+			}else{
+				//This is a press and hold, activate the special
+				Debug.Log ("Press and Hold");
+				playerController.StartAreaAttack();
+				weaponHandler.StartAOEAttack();
 			}
 		}
 	}
@@ -48,11 +54,11 @@ public class InputCapture : MonoBehaviour {
 		Ray camRay;
 		RaycastHit floorHit;
 
-#if UNITY_STANDALONE_WIN
+//#if UNITY_STANDALONE_WIN
 		camRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-#elif UNITY_ANDROID
-		camRay = Camera.main.ScreenPointToRay (Input.touches[0].position);
-#endif
+//#elif UNITY_ANDROID
+//		camRay = Camera.main.ScreenPointToRay (Input.touches[0].position);
+//#endif
 
 		if (Physics.Raycast(camRay,out floorHit,camRayLength, floorMask))
 		{
