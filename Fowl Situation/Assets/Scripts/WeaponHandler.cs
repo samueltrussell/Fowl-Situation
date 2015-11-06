@@ -32,6 +32,7 @@ public class WeaponHandler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player");
+		weaponCollider.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -90,22 +91,25 @@ public class WeaponHandler : MonoBehaviour {
 		switch (attackType) {
 		case AttackType.AOEAttack:
 			if((Time.timeSinceLevelLoad - attackStartTime) > AOEAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (AOEDuration + AOEAnimDelay)){
+				weaponCollider.enabled = true;
 				weaponCollider.radius = AOERange;
 			}
 			else if ((Time.timeSinceLevelLoad - attackStartTime) > (AOEDuration + AOEAnimDelay)) {
 				weaponCollider.radius = .5f;
+				weaponCollider.enabled = false;
 				attacking = false;
 			}
 			break;
 		case AttackType.meleeAttack:
 			if((Time.timeSinceLevelLoad - attackStartTime) > meleeAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (meleeDuration + meleeAnimDelay)){
-				//attackVector = swipe * meleeRange;
+				weaponCollider.enabled = true;
 				weaponBody.position += attackVector;
 			}
 			else if ((Time.timeSinceLevelLoad - attackStartTime) > (meleeDuration + meleeAnimDelay)) {
 				weaponBody.velocity = new Vector3(0,0,0);
 				weaponBody.position = player.transform.position + new Vector3 (0,1,0);
 				attacking = false;
+				weaponCollider.enabled = false;
 			}
 			break;
 		case AttackType.Gun:
