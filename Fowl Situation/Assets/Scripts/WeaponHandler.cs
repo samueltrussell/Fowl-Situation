@@ -8,13 +8,15 @@ public class WeaponHandler : MonoBehaviour {
 	public float meleeRange = 1f;
 	public float meleePower = 50f;
 	public float meleeDuration = .1f;
+	public float meleeAnimDelay = .3f;
 
 	public float AOERange = 3f;
 	public float AOEPower = 50f;
 	public float AOEDuration = 1f;
+	public float AOEAnimDelay = .3f;
 
 	private bool attacking = false;
-	private double attackStartTime;
+	private float attackStartTime;
 	private Vector3 attackVector;
 
 	private GameObject player;
@@ -68,9 +70,9 @@ public class WeaponHandler : MonoBehaviour {
 		if (!attacking) {
 			attacking = true;
 			attackType = AttackType.meleeAttack;
-			attackStartTime = Time.realtimeSinceStartup;
+			attackStartTime = Time.timeSinceLevelLoad;
 			attackVector = swipe * meleeRange;
-			weaponBody.position += attackVector;
+//			weaponBody.position += attackVector;
 		}
 	}
 
@@ -78,8 +80,8 @@ public class WeaponHandler : MonoBehaviour {
 		if (!attacking) {
 			attacking = true;
 			attackType = AttackType.AOEAttack;
-			attackStartTime = Time.realtimeSinceStartup;
-			weaponCollider.radius = AOERange;
+			attackStartTime = Time.timeSinceLevelLoad;
+
 		}
 	}
 	
@@ -87,13 +89,20 @@ public class WeaponHandler : MonoBehaviour {
 	{
 		switch (attackType) {
 		case AttackType.AOEAttack:
-			if (Time.realtimeSinceStartup - attackStartTime > AOEDuration) {
+			if((Time.timeSinceLevelLoad - attackStartTime) > AOEAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (AOEDuration + AOEAnimDelay)){
+				weaponCollider.radius = AOERange;
+			}
+			else if ((Time.timeSinceLevelLoad - attackStartTime) > (AOEDuration + AOEAnimDelay)) {
 				weaponCollider.radius = .5f;
 				attacking = false;
 			}
 			break;
 		case AttackType.meleeAttack:
-			if (Time.realtimeSinceStartup - attackStartTime > meleeDuration) {
+			if((Time.timeSinceLevelLoad - attackStartTime) > meleeAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (meleeDuration + meleeAnimDelay)){
+				//attackVector = swipe * meleeRange;
+				weaponBody.position += attackVector;
+			}
+			else if ((Time.timeSinceLevelLoad - attackStartTime) > (meleeDuration + meleeAnimDelay)) {
 				weaponBody.velocity = new Vector3(0,0,0);
 				weaponBody.position = player.transform.position + new Vector3 (0,1,0);
 				attacking = false;
