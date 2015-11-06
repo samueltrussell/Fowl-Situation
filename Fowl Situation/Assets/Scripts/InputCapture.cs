@@ -54,11 +54,11 @@ public class InputCapture : MonoBehaviour {
 		Ray camRay;
 		RaycastHit floorHit;
 
-#if UNITY_STANDALONE_WIN
+//#if UNITY_STANDALONE_WIN
 		camRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-#elif UNITY_ANDROID
-		camRay = Camera.main.ScreenPointToRay (Input.touches[0].position);
-#endif
+//#elif UNITY_ANDROID
+//		camRay = Camera.main.ScreenPointToRay (Input.touches[0].position);
+//#endif
 
 		if (Physics.Raycast(camRay,out floorHit,camRayLength, floorMask))
 		{
