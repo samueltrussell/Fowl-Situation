@@ -1,19 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
 
 	public GameObject player, target;
-	public float moveSpeed= 10f;
+	public float moveSpeed = 10f;
 	public Animator anim;
+	public int playerHealth = 100;
+	public Slider healthBar;
+	public Text healthLabel;
 
 	private Vector3 targetPosition;
 	private Vector3 movement;
 	private Vector3 headingToTarget;
+	private Vector3 attackVector;
 
 	private bool attacking = false;
-	private Vector3 attackVector;
+	private bool alive = true;
+
 	private double attackStartTime;
 
 	void Awake()
@@ -23,11 +29,18 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update()
+	{
+		UpdateHealth ();
+	}
 
-		if (attacking)
-			attack ();
-		Move ();
+	// FixedUpdate is called once per physics time step
+	void FixedUpdate () {
+		if (alive) {
+			if (attacking)
+				attack ();
+			Move ();
+		}
 	}
 
 	void Move()
@@ -77,6 +90,7 @@ public class PlayerController : MonoBehaviour {
 		headingToTarget = swipe;
 		anim.SetTrigger ("Punch");
 
+
 	}
 
 	public void StartAreaAttack(){
@@ -86,6 +100,28 @@ public class PlayerController : MonoBehaviour {
 	public void attack()
 	{
 
+	}
+
+	public void takeDamage(int damage)
+	{
+		if (alive) {
+			playerHealth -= damage;
+			if (playerHealth == 0) {
+				Die ();
+			}
+		}
+	}
+
+	public void UpdateHealth()
+	{
+		healthBar.value = playerHealth;
+		healthLabel.text = playerHealth.ToString();
+	}
+
+	public void Die()
+	{
+		alive = false;
+		anim.SetTrigger ("Die");
 	}
 
 }
