@@ -5,28 +5,35 @@ public class EnemyHealth : MonoBehaviour {
 
 	public int startingHealth;
 	public int currentHealth;
-	public int scoreValue = 10;
+	public float sinkspeed = 2.5f;
+	float timeOfDeath;
+	public float tSink  = 4f;
+	GameObject em;
 
 
 	CapsuleCollider capsuleCollider;
 	bool isDead;
-	bool isFlying;
+	bool isSinking;
+
+	bool already = false;
 
 
+//	Animator anim;
 	void Awake()
 	{
+		//anim = GetComponent<Animator> ();
 		capsuleCollider = GetComponent<CapsuleCollider> ();
+		em = GameObject.FindGameObjectWithTag ("EnemyManager");
 		currentHealth = startingHealth;
-	
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
 	
-		if (isFlying) 
+		if (isSinking) 
 		{
-			transform.Translate(Vector3.up * Time.deltaTime);
+			StartSinking();
 		}
 
 	}
@@ -36,6 +43,7 @@ public class EnemyHealth : MonoBehaviour {
 		if (isDead)
 			return;
 
+		//Reduce the health
 		currentHealth -= amount;
 
 		if(currentHealth <= 0)
@@ -48,7 +56,39 @@ public class EnemyHealth : MonoBehaviour {
 	void Death()
 	{
 		isDead = true;
-		capsuleCollider.isTrigger = true;
+		Rigidbody enemyBody = this.gameObject.GetComponent<Rigidbody> ();// = RigidbodyConstraints.None;
+		enemyBody.constraints = RigidbodyConstraints.None;
+
+		//Disabling NavMeshAgent
+		GetComponent<NavMeshAgent> ().enabled = false;
+		timeOfDeath = Time.timeSinceLevelLoad;
+		StartSinking ();
 
 	}
+
+	public void StartSinking()
+	{
+		//Disabling NavMeshAgent
+//		GetComponent<NavMeshAgent> ().enabled = false;
+
+
+		isSinking = true;
+		if ((Time.timeSinceLevelLoad - timeOfDeath) > tSink) 
+		{
+			if(!already)
+			{
+				//GetComponent<Rigidbody> ().isKinematic = true;
+				capsuleCollider.isTrigger = true;
+				Destroy (gameObject, 4f);
+				em.GetComponent<EnemyManager>().totalEnemies--;
+				already = true;
+			}
+			//transform.Translate(-Vector3.up * Time.deltaTime);
+
+		}
+		//Destroy gameobject after 2 seconds
+
+
+	}
+
 }

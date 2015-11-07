@@ -5,6 +5,7 @@ public class EnemyMovement : MonoBehaviour {
 
 	Transform player;
 	NavMeshAgent nav;
+	public EnemyHealth enemyhealth;
 
 	void Awake()
 	{
@@ -15,9 +16,10 @@ public class EnemyMovement : MonoBehaviour {
 
 	void Update()
 	{
-
-		nav.SetDestination (player.position);
-
+		if (enemyhealth.currentHealth > 0) 
+		{
+			nav.SetDestination (player.position);
+		}
 	}
 
 }
