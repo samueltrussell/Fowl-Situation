@@ -19,6 +19,8 @@ public class WeaponHandler : MonoBehaviour {
 	private float attackStartTime;
 	private Vector3 attackVector;
 
+	private EnemyHealth enemyHealth;
+
 	private GameObject player;
 
 	enum AttackType{
@@ -42,6 +44,9 @@ public class WeaponHandler : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision){
+
+		enemyHealth = collision.gameObject.GetComponent<EnemyHealth> ();
+
 		switch (attackType) {
 		case AttackType.AOEAttack:
 			Debug.Log ("AOE Attack!");
@@ -51,6 +56,7 @@ public class WeaponHandler : MonoBehaviour {
 				force.Normalize ();
 				force *= AOEPower;
 				enemy.AddForce (force, ForceMode.Impulse);
+				enemyHealth.TakeDamage(5);
 			}
 			break;
 		case AttackType.meleeAttack:
@@ -61,6 +67,7 @@ public class WeaponHandler : MonoBehaviour {
 				force.Normalize ();
 				force *= meleePower;
 				enemy.AddForce (force, ForceMode.Impulse);
+				enemyHealth.TakeDamage(10);
 			}
 			break;
 		}
