@@ -15,6 +15,14 @@ public class WeaponHandler : MonoBehaviour {
 	public float AOEDuration = 1f;
 	public float AOEAnimDelay = .3f;
 
+	//Sound files
+	public AudioClip punchWhiff;
+	public AudioClip punchCluckHit;
+	public AudioClip spinWhiff;
+	public AudioClip spinHit;
+	public AudioSource hitAudio;
+	public AudioSource swingAudio;
+
 	private bool attacking = false;
 	private float attackStartTime;
 	private Vector3 attackVector;
@@ -57,6 +65,9 @@ public class WeaponHandler : MonoBehaviour {
 				force *= AOEPower;
 				enemy.AddForce (force, ForceMode.Impulse);
 				enemyHealth.TakeDamage(5);
+
+				//hitAudio.clip = punchCluckHit;
+				hitAudio.PlayOneShot(spinHit);
 			}
 			break;
 		case AttackType.meleeAttack:
@@ -68,6 +79,9 @@ public class WeaponHandler : MonoBehaviour {
 				force *= meleePower;
 				enemy.AddForce (force, ForceMode.Impulse);
 				enemyHealth.TakeDamage(10);
+
+				//hitAudio.clip = punchCluckHit;
+				hitAudio.PlayOneShot(punchCluckHit);
 			}
 			break;
 		}
@@ -89,17 +103,23 @@ public class WeaponHandler : MonoBehaviour {
 			attacking = true;
 			attackType = AttackType.AOEAttack;
 			attackStartTime = Time.timeSinceLevelLoad;
-
 		}
 	}
 	
 	public void Attack()
 	{
+
 		switch (attackType) {
 		case AttackType.AOEAttack:
+
+
 			if((Time.timeSinceLevelLoad - attackStartTime) > AOEAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (AOEDuration + AOEAnimDelay)){
 				weaponCollider.enabled = true;
 				weaponCollider.radius = AOERange;
+
+				//Play Audio
+				//swingAudio.clip = spinWhiff;
+				//swingAudio.Play ();
 			}
 			else if ((Time.timeSinceLevelLoad - attackStartTime) > (AOEDuration + AOEAnimDelay)) {
 				weaponCollider.radius = .5f;
@@ -111,6 +131,11 @@ public class WeaponHandler : MonoBehaviour {
 			if((Time.timeSinceLevelLoad - attackStartTime) > meleeAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (meleeDuration + meleeAnimDelay)){
 				weaponCollider.enabled = true;
 				weaponBody.position += attackVector;
+
+				//Play Audio
+				swingAudio.clip = punchWhiff;
+				swingAudio.Play ();
+
 			}
 			else if ((Time.timeSinceLevelLoad - attackStartTime) > (meleeDuration + meleeAnimDelay)) {
 				weaponBody.velocity = new Vector3(0,0,0);
