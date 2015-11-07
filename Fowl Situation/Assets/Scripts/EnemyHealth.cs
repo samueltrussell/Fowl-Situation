@@ -9,6 +9,8 @@ public class EnemyHealth : MonoBehaviour {
 	float timeOfDeath;
 	public float tSink  = 4f;
 	GameObject em;
+	public bool Patsy = false;
+	public GameObject winMessage;
 
 
 	CapsuleCollider capsuleCollider;
@@ -80,7 +82,13 @@ public class EnemyHealth : MonoBehaviour {
 				//GetComponent<Rigidbody> ().isKinematic = true;
 				capsuleCollider.isTrigger = true;
 				Destroy (gameObject, 4f);
-				em.GetComponent<EnemyManager>().totalEnemies--;
+				if(!Patsy){
+					em.GetComponent<EnemyManager>().totalEnemies--;
+				}else if (Patsy){
+					if(winMessage != null){
+						winMessage.SetActive(true);
+					}
+				}
 				already = true;
 			}
 			//transform.Translate(-Vector3.up * Time.deltaTime);
