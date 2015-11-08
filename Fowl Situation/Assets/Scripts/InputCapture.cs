@@ -54,10 +54,10 @@ public class InputCapture : MonoBehaviour {
 		camRay = Camera.main.ScreenPointToRay (Input.touches[0].position);
 #endif
 
-		if (Physics.Raycast(camRay,out floorHit,camRayLength, floorMask))
-		{
-			return floorHit.point;
-		}
+//		if (Physics.Raycast(camRay,out floorHit,camRayLength, floorMask))
+//		{
+//			return floorHit.point;
+//		}
 
 		Debug.Log ("RayCast miss... this is bad");
 		return Vector3.zero;

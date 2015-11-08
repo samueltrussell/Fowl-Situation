@@ -5,7 +5,7 @@ public class ButtonScript : MonoBehaviour {
 	
 	public Transform PauseButton;
 
-	//用来检测是否开启划线（防止小bug）
+	//防止小bug
 	UIButton pauseButtonScript;
 
 	private bool isPause = false;
@@ -27,9 +27,13 @@ public class ButtonScript : MonoBehaviour {
 
 	public Transform MenuBackground;
 
+
+	AudioSource mouseClick;
+	public AudioClip clip;
 	// Use this for initialization
 	void Start () {
-	
+		SetupGUI ();
+		SetupAudio ();
 
 		cam = GameObject.Find ("Main Camera").GetComponent<Camera>();
 	}
@@ -51,7 +55,9 @@ public class ButtonScript : MonoBehaviour {
 	}
 
 	void SetupAudio(){
-
+		mouseClick = gameObject.AddComponent<AudioSource> ();
+		mouseClick.clip = this.clip;
+		mouseClick.loop = false;
 	}
 
 	// Update is called once per frame
@@ -87,17 +93,24 @@ public class ButtonScript : MonoBehaviour {
 
 	}
 
-	void CheckPauseButtonStatus(){
+	void CheckPauseButtonStatus(){  // need work
 //		if (pauseButtonScript.state == UIButtonColor.State.Hover || pauseButtonScript.state == UIButtonColor.State.Pressed) {
 
 			
 //		} else {
 
-//		}
+
+	
+//      }
+	
+
 
 	}
 
 	public void PauseButtonTrigger(){
+		if (!mouseClick.isPlaying)
+			mouseClick.Play ();
+
 		if (!isPause) {		// is playing
 			PauseButton.gameObject.SetActive (false);
 			MenuBackground.gameObject.SetActive (true);
@@ -108,6 +121,9 @@ public class ButtonScript : MonoBehaviour {
 	}
 
 	public void PlayButtonTrigger(){
+		if (!mouseClick.isPlaying)
+			mouseClick.Play ();
+
 		if (isPause) {	
 			
 			PauseButton.gameObject.SetActive (true);
@@ -116,15 +132,23 @@ public class ButtonScript : MonoBehaviour {
 		}
 		
 		isPause = !isPause;	
+
+
 	}
 
 	public void RetryButtonTrigger(){
+		if (!mouseClick.isPlaying)
+			mouseClick.Play ();
+
 		Time.timeScale = 1f;
 		Application.LoadLevel ("Hang's Workshop");
 
 	}
 
 	public void ExitButtonTrigger(){
+		if (!mouseClick.isPlaying)
+			mouseClick.Play ();
+
 		Application.LoadLevel ("Hang's Workshop");
 	}
 	                          

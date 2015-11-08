@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void UpdateTargetPosition(Vector3 i_targetPosition)
 	{
+
 		targetPosition = i_targetPosition;
 		target.transform.position = i_targetPosition + new Vector3(0,.2f,0);
 	}
