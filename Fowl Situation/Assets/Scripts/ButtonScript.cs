@@ -5,7 +5,7 @@ public class ButtonScript : MonoBehaviour {
 	
 	public Transform PauseButton;
 
-	//防止小bug
+
 	UIButton pauseButtonScript;
 
 	private bool isPause = false;
@@ -18,7 +18,7 @@ public class ButtonScript : MonoBehaviour {
 	UISlider lifePoorUISlider;
 
 	float increaseSpeed;
-	//获取能量条控制颜色的脚本
+
 	UISprite liftColorScript;
 
 
