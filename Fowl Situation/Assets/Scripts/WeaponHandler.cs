@@ -15,6 +15,9 @@ public class WeaponHandler : MonoBehaviour {
 	public float AOEDuration = 1f;
 	public float AOEAnimDelay = .3f;
 
+	//Sound Manager
+	private PlayerSoundManager soundManager;
+
 	private bool attacking = false;
 	private float attackStartTime;
 	private Vector3 attackVector;
@@ -34,6 +37,7 @@ public class WeaponHandler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player");
+		soundManager = GetComponent<PlayerSoundManager> ();
 		weaponCollider.enabled = false;
 	}
 	
@@ -57,6 +61,9 @@ public class WeaponHandler : MonoBehaviour {
 				force *= AOEPower;
 				enemy.AddForce (force, ForceMode.Impulse);
 				enemyHealth.TakeDamage(5);
+
+				//SFX
+				soundManager.spinHitSound();
 			}
 			break;
 		case AttackType.meleeAttack:
@@ -68,6 +75,9 @@ public class WeaponHandler : MonoBehaviour {
 				force *= meleePower;
 				enemy.AddForce (force, ForceMode.Impulse);
 				enemyHealth.TakeDamage(10);
+
+				//SFX
+				soundManager.punchHitSound();
 			}
 			break;
 		}
@@ -89,17 +99,20 @@ public class WeaponHandler : MonoBehaviour {
 			attacking = true;
 			attackType = AttackType.AOEAttack;
 			attackStartTime = Time.timeSinceLevelLoad;
-
 		}
 	}
 	
 	public void Attack()
 	{
+
 		switch (attackType) {
 		case AttackType.AOEAttack:
+
+
 			if((Time.timeSinceLevelLoad - attackStartTime) > AOEAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (AOEDuration + AOEAnimDelay)){
 				weaponCollider.enabled = true;
 				weaponCollider.radius = AOERange;
+
 			}
 			else if ((Time.timeSinceLevelLoad - attackStartTime) > (AOEDuration + AOEAnimDelay)) {
 				weaponCollider.radius = .5f;
@@ -111,6 +124,7 @@ public class WeaponHandler : MonoBehaviour {
 			if((Time.timeSinceLevelLoad - attackStartTime) > meleeAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (meleeDuration + meleeAnimDelay)){
 				weaponCollider.enabled = true;
 				weaponBody.position += attackVector;
+
 			}
 			else if ((Time.timeSinceLevelLoad - attackStartTime) > (meleeDuration + meleeAnimDelay)) {
 				weaponBody.velocity = new Vector3(0,0,0);
