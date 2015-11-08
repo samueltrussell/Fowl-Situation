@@ -18,13 +18,14 @@ public class EnemyHealth : MonoBehaviour {
 	bool already = false;
 
 
-//	Animator anim;
+	public Animator anim;
 	void Awake()
 	{
 		//anim = GetComponent<Animator> ();
 		capsuleCollider = GetComponent<CapsuleCollider> ();
 		em = GameObject.FindGameObjectWithTag ("EnemyManager");
 		currentHealth = startingHealth;
+		anim = GetComponentInChildren<Animator> ();
 	}
 
 	// Update is called once per frame
@@ -62,6 +63,7 @@ public class EnemyHealth : MonoBehaviour {
 		//Disabling NavMeshAgent
 		GetComponent<NavMeshAgent> ().enabled = false;
 		timeOfDeath = Time.timeSinceLevelLoad;
+		anim.SetTrigger("Die");
 		StartSinking ();
 
 	}
