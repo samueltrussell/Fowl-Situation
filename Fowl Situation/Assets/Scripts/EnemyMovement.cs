@@ -20,6 +20,9 @@ public class EnemyMovement : MonoBehaviour {
 		{
 			nav.SetDestination (player.position);
 		}
+
 	}
+
+
 
 }
