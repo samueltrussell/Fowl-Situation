@@ -4,11 +4,26 @@ using System.Collections;
 public class PlayerDamage : MonoBehaviour {
 	
 	public PlayerController playerController;
+	//public Animator anim;
 
-	void OnCollisionEnter(Collision collision)
+	void Awake()
 	{
+		//anim = GetComponent<Animator> ();
+	
+	}
+
+
+	void OnTriggerStay(Collider collision)
+	{
+
 		if (collision.gameObject.tag == "EnemyWeapon") {
-			playerController.takeDamage(5);
+			Debug.Log ("In Trigger Stay");
+			//anim.SetBool ("Attack", true);
+			playerController.takeDamage (10);
+		}
+		else 
+		{
+			//anim.SetBool ("Attack", false);
 		}
 	}
 }
