@@ -90,6 +90,7 @@ public class WeaponHandler : MonoBehaviour {
 			attackType = AttackType.meleeAttack;
 			attackStartTime = Time.timeSinceLevelLoad;
 			attackVector = swipe * meleeRange;
+
 //			weaponBody.position += attackVector;
 		}
 	}
@@ -99,6 +100,7 @@ public class WeaponHandler : MonoBehaviour {
 			attacking = true;
 			attackType = AttackType.AOEAttack;
 			attackStartTime = Time.timeSinceLevelLoad;
+
 		}
 	}
 	
