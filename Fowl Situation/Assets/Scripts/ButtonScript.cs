@@ -11,7 +11,6 @@ public class ButtonScript : MonoBehaviour {
 	private bool isPause = false;
 
 
-	public Transform lifePoor;
 
 	private Transform lifePoorForeground;
 	
@@ -28,8 +27,20 @@ public class ButtonScript : MonoBehaviour {
 	public Transform MenuBackground;
 
 
+
+
+	public Transform BackgroundMusicVolumeSlider;
+	UISlider BackgroundMusicVolumeSliderScript;
+	
+	public Transform SoundEffectVolumeSlider;
+	UISlider SoundEffectVolumeSliderScript;
+
+	AudioSource titleBackgroundMusic;
 	AudioSource mouseClick;
-	public AudioClip clip;
+
+	float clickAudioTime;
+
+	public AudioClip [] clips;
 	// Use this for initialization
 	void Start () {
 		SetupGUI ();
@@ -40,24 +51,36 @@ public class ButtonScript : MonoBehaviour {
 
 
 	void SetupGUI(){
-		lifePoorUISlider = lifePoor.gameObject.GetComponent<UISlider> ();
-		lifePoorUISlider.value = 0.0f;
 		
 		increaseSpeed = .05f;
 		pauseButtonScript = PauseButton.GetComponent<UIButton> ();
-		
-		//initialize the color of life poor
-		lifePoorForeground = lifePoor.Find ("Foreground").transform;
 
-		//get the script to control the color of life poor
-		liftColorScript = lifePoorForeground.GetComponent<UISprite> ();
 
 	}
 
 	void SetupAudio(){
-		mouseClick = gameObject.AddComponent<AudioSource> ();
-		mouseClick.clip = this.clip;
+
+		BackgroundMusicVolumeSliderScript = BackgroundMusicVolumeSlider.GetComponent<UISlider> ();
+		SoundEffectVolumeSliderScript = SoundEffectVolumeSlider.GetComponent<UISlider> ();
+		
+		
+		titleBackgroundMusic = this.gameObject.AddComponent<AudioSource> ();
+		titleBackgroundMusic.clip = this.clips[0];
+		titleBackgroundMusic.loop = true;
+		titleBackgroundMusic.Play ();
+		
+		mouseClick = this.gameObject.AddComponent<AudioSource> ();
+		mouseClick.clip = this.clips [1];
 		mouseClick.loop = false;
+
+
+		BackgroundMusicVolumeSliderScript.value = SoundManager.SM.backgroundMusicVol;
+		SoundEffectVolumeSliderScript.value = SoundManager.SM.soundEffectVol;
+		
+		titleBackgroundMusic.volume = BackgroundMusicVolumeSliderScript.value;
+		mouseClick.volume = SoundEffectVolumeSliderScript.value;
+
+		clickAudioTime = mouseClick.clip.length;
 	}
 
 	// Update is called once per frame
@@ -90,7 +113,11 @@ public class ButtonScript : MonoBehaviour {
 	}
 
 	void ChangeVolume(){
-
+		SoundManager.SM.backgroundMusicVol =BackgroundMusicVolumeSliderScript.value ;
+		SoundManager.SM.soundEffectVol = SoundEffectVolumeSliderScript.value;
+		
+		titleBackgroundMusic.volume = BackgroundMusicVolumeSliderScript.value;
+		mouseClick.volume = SoundEffectVolumeSliderScript.value;
 	}
 
 	void CheckPauseButtonStatus(){  // need work
@@ -149,7 +176,12 @@ public class ButtonScript : MonoBehaviour {
 		if (!mouseClick.isPlaying)
 			mouseClick.Play ();
 
-		Application.LoadLevel ("Hang's Workshop");
+		StartCoroutine(TitleScene());
+	}
+
+	IEnumerator TitleScene() {
+		yield return new WaitForSeconds(clickAudioTime);
+		Application.LoadLevel ("Title Scene");
 	}
 	                          
 }
