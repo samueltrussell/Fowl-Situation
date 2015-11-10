@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
 	public Slider healthBar;
 	public Text healthLabel;
 
+	private Rigidbody rigidBody;
 	private Vector3 targetPosition;
 	private Vector3 movement;
 	private Vector3 headingToTarget;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour {
 	void Awake()
 	{
 		targetPosition = transform.position;
+		rigidBody = GetComponent<Rigidbody> ();
 		//meleeWeaponBody = meleeWeapon.GetComponentInChildren<Rigidbody> ();
 	}
 
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour {
 			movement = (targetPosition - transform.position);
 			//headingToTarget = movement.normalized;
 			movement = movement.normalized * moveSpeed * Time.fixedDeltaTime;
+
 			transform.position = (transform.position + movement);
 		} else {
 			movement = (targetPosition - transform.position);
