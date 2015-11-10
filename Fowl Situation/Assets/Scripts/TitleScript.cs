@@ -17,10 +17,13 @@ public class TitleScript : MonoBehaviour {
 
 	bool isSettingButtonOn;
 	public Transform Sliders;
+
+	Transform UI;
 	// Use this for initialization
 	void Start () {
 		SliderSetup ();
-
+		ITweenSetup ();
+		UISetup ();
 	}
 	
 	// Update is called once per frame
@@ -28,6 +31,15 @@ public class TitleScript : MonoBehaviour {
 		SliderUpdate ();
 	}
 
+
+	void ITweenSetup(){
+		iTween.CameraFadeAdd ();
+	}
+
+	void UISetup(){
+		UI = GameObject.Find ("UI Root").transform;
+		UI.gameObject.SetActive (true);
+	}
 
 	void SliderSetup(){
 		BackgroundMusicVolumeSliderScript = BackgroundMusicVolumeSlider.GetComponent<UISlider> ();
@@ -75,11 +87,14 @@ public class TitleScript : MonoBehaviour {
 		if (!mouseClick.isPlaying)
 			mouseClick.Play ();
 
-		StartCoroutine(NewGameScene());
+		UI.gameObject.SetActive (false);
+		iTween.CameraFadeTo (iTween.Hash ("amount", 1, "time", 0.5, "oncomplete", "NewGameScene", "oncompletetarget", gameObject));
+		
 	}
 
-	IEnumerator NewGameScene() {
-		yield return new WaitForSeconds(clickAudioTime);
+
+	void NewGameScene() {
+
 		Application.LoadLevel ("Hang's Workshop");
 	}
 
@@ -88,11 +103,12 @@ public class TitleScript : MonoBehaviour {
 		if (!mouseClick.isPlaying)
 			mouseClick.Play ();
 
-		StartCoroutine(ToturialScene());
+		UI.gameObject.SetActive (false);
+		iTween.CameraFadeTo (iTween.Hash ("amount", 1, "time", 0.5, "oncomplete", "ToturialScene", "oncompletetarget", gameObject));
 	}
 
-	IEnumerator ToturialScene() {
-		yield return new WaitForSeconds(clickAudioTime);
+	void ToturialScene() {
+
 		Application.LoadLevel ("Hang's Workshop");   // change to toturial later~
 	}
 

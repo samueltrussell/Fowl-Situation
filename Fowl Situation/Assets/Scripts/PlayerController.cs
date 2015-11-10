@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour {
 	{
 
 		targetPosition = i_targetPosition;
-		target.transform.position = i_targetPosition + new Vector3(0,.2f,0);
+//		target.transform.position = i_targetPosition + new Vector3(0,.2f,0);
 	}
 
 	public void StartAttack(Vector3 swipe)

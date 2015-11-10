@@ -26,7 +26,7 @@ public class ButtonScript : MonoBehaviour {
 
 	public Transform MenuBackground;
 
-
+	Transform UI;
 
 
 	public Transform BackgroundMusicVolumeSlider;
@@ -47,6 +47,8 @@ public class ButtonScript : MonoBehaviour {
 		SetupAudio ();
 
 		cam = GameObject.Find ("Main Camera").GetComponent<Camera>();
+
+		iTween.CameraFadeAdd ();
 	}
 
 
@@ -55,7 +57,8 @@ public class ButtonScript : MonoBehaviour {
 		increaseSpeed = .05f;
 		pauseButtonScript = PauseButton.GetComponent<UIButton> ();
 
-
+		UI = GameObject.Find ("UI Root").transform;
+		UI.gameObject.SetActive (true);
 	}
 
 	void SetupAudio(){
@@ -130,8 +133,6 @@ public class ButtonScript : MonoBehaviour {
 	
 //      }
 	
-
-
 	}
 
 	public void PauseButtonTrigger(){
@@ -176,11 +177,12 @@ public class ButtonScript : MonoBehaviour {
 		if (!mouseClick.isPlaying)
 			mouseClick.Play ();
 
-		StartCoroutine(TitleScene());
+		UI.gameObject.SetActive (false);
+		iTween.CameraFadeTo (iTween.Hash ("amount", 1, "time", 0.5, "oncomplete", "TitleScene", "oncompletetarget", gameObject));
 	}
 
-	IEnumerator TitleScene() {
-		yield return new WaitForSeconds(clickAudioTime);
+	void TitleScene() {
+	
 		Application.LoadLevel ("Title Scene");
 	}
 	                          
