@@ -8,9 +8,11 @@ public class PlayerController : MonoBehaviour {
 	public GameObject player, target;
 	public float moveSpeed = 10f;
 	public Animator anim;
-	public int playerHealth = 100;
+	//public int playerHealth = 100;
+	public float playerHealth = 100f;
 	public Slider healthBar;
 	public Text healthLabel;
+
 
 	private Vector3 targetPosition;
 	private Vector3 movement;
@@ -102,7 +104,7 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-	public void takeDamage(int damage)
+	public void takeDamage(float damage)
 	{
 		if (alive) {
 			playerHealth -= damage;
