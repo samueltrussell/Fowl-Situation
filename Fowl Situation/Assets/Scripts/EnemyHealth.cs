@@ -6,19 +6,18 @@ public class EnemyHealth : MonoBehaviour {
 	public int startingHealth;
 	public int currentHealth;
 	public float sinkspeed = 2.5f;
-	float timeOfDeath;
 	public float tSink  = 4f;
-	GameObject em;
 	public bool Patsy = false;
 	public GameObject winMessage;
 
 
+	ParticleSystem bloodParticles;
+	GameObject em;
 	CapsuleCollider capsuleCollider;
+	float timeOfDeath;
+	bool already = false;
 	bool isDead;
 	bool isSinking;
-
-	bool already = false;
-
 
 	public Animator anim;
 	void Awake()
@@ -28,6 +27,7 @@ public class EnemyHealth : MonoBehaviour {
 		em = GameObject.FindGameObjectWithTag ("EnemyManager");
 		currentHealth = startingHealth;
 		anim = GetComponentInChildren<Animator> ();
+		bloodParticles = GetComponentInChildren<ParticleSystem> ();
 	}
 
 	// Update is called once per frame
@@ -46,6 +46,7 @@ public class EnemyHealth : MonoBehaviour {
 		if (isDead)
 			return;
 
+		bloodParticles.Play ();
 		//Reduce the health
 		currentHealth -= amount;
 
@@ -84,13 +85,13 @@ public class EnemyHealth : MonoBehaviour {
 				//GetComponent<Rigidbody> ().isKinematic = true;
 				capsuleCollider.isTrigger = true;
 				Destroy (gameObject, 4f);
-				/*if(!Patsy){
+				if(!Patsy){
 					em.GetComponent<EnemyManager>().totalEnemies--;
 				}else if (Patsy){
 					if(winMessage != null){
 						winMessage.SetActive(true);
 					}
-				}*/
+				}
 				already = true;
 			}
 			//transform.Translate(-Vector3.up * Time.deltaTime);

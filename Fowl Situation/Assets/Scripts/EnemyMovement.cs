@@ -7,13 +7,11 @@ public class EnemyMovement : MonoBehaviour {
 	NavMeshAgent nav;
 	public EnemyHealth enemyhealth;
 	public Animator anim;
-	public float distancefromPlayer;
-	
+
 	void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
 		nav = GetComponent<NavMeshAgent> ();
-		anim = GetComponentInChildren<Animator> ();
 	}
 
 	void Update()
@@ -21,16 +19,12 @@ public class EnemyMovement : MonoBehaviour {
 		if (enemyhealth.currentHealth > 0) 
 		{
 			nav.SetDestination (player.position);
-			/*
-			if(distancefromPlayer < 1.7  )
-			{
-				anim.SetBool("Attack",true);
-			}
-			else
-			{
-				anim.SetBool("Attack", false);
-			}*/
 		}
+
+		if (Vector3.Distance(player.position, transform.position) > nav.stoppingDistance)
+			anim.SetBool ("Walking", true);
+		else
+			anim.SetBool ("Walking", false);
 
 	}
 
