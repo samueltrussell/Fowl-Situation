@@ -6,6 +6,7 @@ public class EnemyHealth : MonoBehaviour {
 	public int startingHealth;
 	public int currentHealth;
 	public float sinkspeed = 2.5f;
+	public int scoreValue = 10;
 	public float tSink  = 4f;
 	public bool Patsy = false;
 	public GameObject winMessage;
@@ -84,6 +85,7 @@ public class EnemyHealth : MonoBehaviour {
 			{
 				//GetComponent<Rigidbody> ().isKinematic = true;
 				capsuleCollider.isTrigger = true;
+				ScoreManager.score += scoreValue;
 				Destroy (gameObject, 4f);
 				if(!Patsy){
 					em.GetComponent<EnemyManager>().totalEnemies--;

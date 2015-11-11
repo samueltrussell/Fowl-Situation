@@ -18,7 +18,7 @@ public class PlayerDamage : MonoBehaviour {
 	{
 
 		if (collision.gameObject.tag == "EnemyWeapon") {
-			Debug.Log ("In Trigger Stay");
+			Debug.Log ("Enemy Hit");
 			//anim.SetBool ("Attack", true);
 			playerController.takeDamage (attackDamage);
 		}

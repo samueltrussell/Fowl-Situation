@@ -4,7 +4,7 @@ using System.Collections;
 	public class EnemyAttack : MonoBehaviour
 {
 	public float timeBetweenAttacks = 0.5f;     
-	public float attackDamage = 10f;               
+	//public float attackDamage = 10f;               
 	public SphereCollider weaponCollider;
 	public Rigidbody weaponbody;
 	public float attackStartDelay = 1f;
@@ -47,7 +47,7 @@ using System.Collections;
 				Attack ();
 			}	
 		} else {
-			timer = timeBetweenAttacks - (timeBetweenAttacks - attackStartDelay);
+			timer = timeBetweenAttacks - attackStartDelay;
 		}
 
 	}

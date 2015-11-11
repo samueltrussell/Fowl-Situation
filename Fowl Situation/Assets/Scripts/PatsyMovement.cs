@@ -5,6 +5,7 @@ public class PatsyMovement : MonoBehaviour {
 
 	Transform player;
 	NavMeshAgent nav;
+	Animator anim;
 
 	public EnemyHealth enemyhealth;
 	public float flightArrestDistance = 1f;
@@ -15,6 +16,7 @@ public class PatsyMovement : MonoBehaviour {
 	{
 		player = GameObject.FindGameObjectWithTag ("Player").transform;
 		nav = GetComponent<NavMeshAgent> ();
+		anim = GetComponentInChildren<Animator> ();
 
 	}
 
@@ -36,6 +38,12 @@ public class PatsyMovement : MonoBehaviour {
 				//nav.setDestination();
 			}
 		}
+
+		if (nav.velocity.magnitude > .25)
+			anim.SetBool ("Walking", true);
+		else
+			anim.SetBool ("Walking", false);
+
 	}
 
 }
