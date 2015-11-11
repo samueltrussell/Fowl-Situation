@@ -8,23 +8,26 @@ public class PlayerController : MonoBehaviour {
 	public GameObject player, target;
 	public float moveSpeed = 10f;
 	public Animator anim;
-	public int playerHealth = 100;
+	//public int playerHealth = 100;
+	public float playerHealth = 100f;
 	public Slider healthBar;
 	public Text healthLabel;
 
+	//private Rigidbody rigidBody;
 	private Vector3 targetPosition;
 	private Vector3 movement;
 	private Vector3 headingToTarget;
 	private Vector3 attackVector;
 
 	private bool attacking = false;
-	private bool alive = true;
+	public bool alive = true;
 
 	private double attackStartTime;
 
 	void Awake()
 	{
 		targetPosition = transform.position;
+		//rigidBody = GetComponent<Rigidbody> ();
 		//meleeWeaponBody = meleeWeapon.GetComponentInChildren<Rigidbody> ();
 	}
 
@@ -47,10 +50,11 @@ public class PlayerController : MonoBehaviour {
 	{
 		float error = Vector3.Distance (targetPosition, transform.position);
 
-		if (error > .2) {
+		if (error > .4) {
 			movement = (targetPosition - transform.position);
 			//headingToTarget = movement.normalized;
 			movement = movement.normalized * moveSpeed * Time.fixedDeltaTime;
+
 			transform.position = (transform.position + movement);
 		} else {
 			movement = (targetPosition - transform.position);
@@ -102,11 +106,12 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-	public void takeDamage(int damage)
+	public void takeDamage(float damage)
 	{
 		if (alive) {
 			playerHealth -= damage;
-			if (playerHealth == 0) {
+			if (playerHealth <= 0) {
+				playerHealth = 0;
 				Die ();
 			}
 		}

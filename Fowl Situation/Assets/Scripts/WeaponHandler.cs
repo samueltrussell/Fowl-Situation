@@ -4,7 +4,8 @@ using System.Collections;
 public class WeaponHandler : MonoBehaviour {
 	
 	public SphereCollider weaponCollider;
-	public Rigidbody weaponBody;
+	//public Rigidbody weaponBody;
+	public Transform weaponTransform;
 	public float meleeRange = 1f;
 	public float meleePower = 50f;
 	public float meleeDuration = .1f;
@@ -47,7 +48,7 @@ public class WeaponHandler : MonoBehaviour {
 			Attack ();
 	}
 
-	void OnCollisionEnter(Collision collision){
+	void OnTriggerEnter(Collider collision){
 
 		enemyHealth = collision.gameObject.GetComponent<EnemyHealth> ();
 
@@ -85,20 +86,25 @@ public class WeaponHandler : MonoBehaviour {
 
 	public void StartAttack(Vector3 swipe)
 	{
-		if (!attacking) {
-			attacking = true;
-			attackType = AttackType.meleeAttack;
-			attackStartTime = Time.timeSinceLevelLoad;
-			attackVector = swipe * meleeRange;
-//			weaponBody.position += attackVector;
+		if (player.GetComponent<PlayerController>().alive) {
+			if (!attacking) {
+				attacking = true;
+				attackType = AttackType.meleeAttack;
+				attackStartTime = Time.timeSinceLevelLoad;
+				attackVector = swipe * meleeRange;
+
+			}
 		}
 	}
 
 	public void StartAOEAttack(){
-		if (!attacking) {
-			attacking = true;
-			attackType = AttackType.AOEAttack;
-			attackStartTime = Time.timeSinceLevelLoad;
+		if (player.GetComponent<PlayerController> ().alive) {
+			if (!attacking) {
+				attacking = true;
+				attackType = AttackType.AOEAttack;
+				attackStartTime = Time.timeSinceLevelLoad;
+
+			}
 		}
 	}
 	
@@ -123,12 +129,10 @@ public class WeaponHandler : MonoBehaviour {
 		case AttackType.meleeAttack:
 			if((Time.timeSinceLevelLoad - attackStartTime) > meleeAnimDelay && (Time.timeSinceLevelLoad - attackStartTime) < (meleeDuration + meleeAnimDelay)){
 				weaponCollider.enabled = true;
-				weaponBody.position += attackVector;
-
+				weaponTransform.position = player.transform.position + attackVector + new Vector3(0,1,0);
 			}
 			else if ((Time.timeSinceLevelLoad - attackStartTime) > (meleeDuration + meleeAnimDelay)) {
-				weaponBody.velocity = new Vector3(0,0,0);
-				weaponBody.position = player.transform.position + new Vector3 (0,1,0);
+				weaponTransform.position = player.transform.position + new Vector3 (0,1,0);
 				attacking = false;
 				weaponCollider.enabled = false;
 			}
