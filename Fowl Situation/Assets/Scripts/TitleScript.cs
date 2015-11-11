@@ -95,7 +95,7 @@ public class TitleScript : MonoBehaviour {
 
 	void NewGameScene() {
 
-		Application.LoadLevel ("Hang's Workshop");
+		Application.LoadLevel ("Sam's Workshop");
 	}
 
 
